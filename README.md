@@ -2,13 +2,22 @@
 android项目中的工具类，可以直接下载使用，有自己的总结与封装，也有别人封装的，MainActivity中有具体的使用方法，方便项目的快速开发，会随着能力的提升不断的更新增加，以下是目前的工具类：
 
 1.动画工具类AnimatorUtil
+
 2.活动管理工具类ActivityCollectorUtil
+
 3.用于背景模糊Blur、BlurBehind、OnBlurCompleteListener
+
 4.通过选择相册或者拍照上传单张图片工具类SelectImageUtil
+
 5.PopupWindowSelectUtil
+
 6.Toast工具类ToastUtil
+
 7.AppCenterUtil
+
 8.RetrofitUtil
+
+9.用于更新安装包的自动下载更新DownloadThreadUtil
 
 How to use
 
@@ -143,4 +152,60 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+}
+
+/**
+ * Created by Laiyin on 2017/8/3.
+ * <p>
+ * Logo页面 此页面中进行更新检查和登陆状态检查 先进行更新检查
+ * <p>
+ * 在需要下载的时候直接调用线程即可，此demo只是下载安装，不包括验证更新检查
+ */
+
+public class LogoActivity extends AppCompatActivity implements DownloadThreadUtil.ThreadCallback {
+
+    private TextView textView;
+
+    private int downloadApkSize;
+    private int fileApkSize;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_logo);
+        initView();
+    }
+
+    public void initView() {
+        textView = (TextView) findViewById(R.id.tv_check_update);
+        new DownloadThreadUtil(LogoActivity.this, LogoActivity.this, Constants.downloadApkUrl, Constants.filePath, Constants.filePathApk, Constants.filePathApkName).start();
+    }
+
+    @Override
+    public void threadStartListener() {
+        new Handler(LogoActivity.this.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText("下载中，请稍后...");
+            }
+        });
+    }
+
+    @Override
+    public void threadDownloadListener(int downloadSize, int fileSize) {
+        downloadApkSize=downloadSize;
+        fileApkSize=fileSize;
+        new Handler(LogoActivity.this.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText("已下载"+Integer.valueOf(downloadApkSize * 100 / fileApkSize).toString()+"%");
+            }
+        });
+    }
+
+    @Override
+    public void threadEndListener() {
+
+    }
+
 }
