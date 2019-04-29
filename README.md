@@ -73,11 +73,12 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 对PopupWindowSelectUtil的使用，PopupWindowSelectUtil可以与SelectImageUtil结合使用，并且PopupWindowSelectUtil中
      * 也封装了对SelectImageUtil的使用
-     * 此方法后面还需要四个参数,都是资源布局,具体的可以看app包中的res文件夹中的布局文件,以及app包中的PopupWindowSelectUtil中使用到的布局文件，这      * 里面不是使用的参数
+     * 此方法后面还需要四个参数,都是资源布局,具体的可以看app包中的res文件夹中的布局文件,以及app包中的PopupWindowSelectUtil中使用到的布局文件，这        * 里面不是使用的参数
      */
     
     public void popupWindowSelectUtil() {
-        PopupWindowSelectUtil popupWindowSelectUtil = new PopupWindowSelectUtil(this, MainActivity.this, R.layout.activity_main, ivCemare);
+        PopupWindowSelectUtil popupWindowSelectUtil = new PopupWindowSelectUtil(this, MainActivity.this, 
+										R.layout.activity_main, ivCemare);
         popupWindowSelectUtil.show();
     }
 
